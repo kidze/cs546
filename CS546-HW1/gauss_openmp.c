@@ -50,7 +50,7 @@ void parameters(int argc, char **argv) {
 	/* Read command-line arguments */
 	srand(time_seed());  /* Randomize */
 
-	if (argc == 4) {
+	if (argc == 3) {
 		seed = atoi(argv[2]);
 		srand(seed);
 		//numThreads=atoi(argv[3]);
