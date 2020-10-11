@@ -191,9 +191,10 @@ void gauss() {
 
   printf("Computing in parallel using pthread.\n");
 
-  //initializing pthreads
+  //initializing pthreads and arg struct
   pthread_t threads[numThreads];
   int thread;
+  struct arg_struct *arg;
 
   /* Gaussian elimination */
   for (norm = 0; norm < N - 1; norm++) {
@@ -206,13 +207,14 @@ void gauss() {
       B[row] -= B[norm] * multiplier;
   	}
 	*/
+
 	//creating threads to execute elinimation() in parallel
 	for(thread = 0; thread < numThreads; thread++){
-		struct arg_struct arg;
-		arg.norm = norm;
-		arg.row = row;
-		arg.thread = thread;
-		pthread_create(&threads[thread], NULL, elimination, (void*) &arg);
+		arg = malloc(sizeof(struct arg_struct));
+		(*arg).norm = norm;
+		(*arg).row = row;
+		(*arg).thread = thread;
+		pthread_create(&threads[thread], NULL, elimination, (void*) arg);
 	}
 	//joining threads
 	for(thread = 0; thread < numThreads; thread++){
@@ -234,13 +236,13 @@ void gauss() {
   }
 }
 
-struct arg_struct{
+struct arg_struct {
 	int norm;
 	int row;
 	int thread;
-}
+};
 
-void *elimination(struct arg_struct arg){
+void *elimination(struct arg_struct arg) {
 	int norm = arg.norm;
 	int row = arg.row;
 	int thread = arg.thread;
