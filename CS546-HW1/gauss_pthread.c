@@ -194,7 +194,7 @@ void gauss() {
   //initializing pthreads and arg struct
   pthread_t threads[numThreads];
   int thread;
-  struct arg_struct *arg;
+  struct arg_struct arg;
 
   /* Gaussian elimination */
   for (norm = 0; norm < N - 1; norm++) {
@@ -211,10 +211,10 @@ void gauss() {
 	//creating threads to execute elinimation() in parallel
 	for(thread = 0; thread < numThreads; thread++){
 		arg = malloc(sizeof(struct arg_struct));
-		(*arg).norm = norm;
-		(*arg).row = row;
-		(*arg).thread = thread;
-		pthread_create(&threads[thread], NULL, elimination, (void*) arg);
+		(arg).norm = norm;
+		(arg).row = row;
+		(arg).thread = thread;
+		pthread_create(&threads[thread], NULL, elimination, (void*) &arg);
 	}
 	//joining threads
 	for(thread = 0; thread < numThreads; thread++){
@@ -242,7 +242,7 @@ struct arg_struct {
 	int thread;
 };
 
-void *elimination(struct arg_struct arg) {
+void* elimination(struct arg_struct arg) {
 	int norm = arg.norm;
 	int row = arg.row;
 	int thread = arg.thread;
