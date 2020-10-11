@@ -191,8 +191,8 @@ int main(int argc, char **argv) {
  	int thread;
  };
 
- void* elimination(struct arg_struct);
- void* elimination(struct arg_struct arg) {
+ void *elimination(struct arg_struct);
+ void *elimination(struct arg_struct arg) {
  	int norm = arg.norm;
  	int row = arg.row;
  	int thread = arg.thread;
@@ -238,7 +238,7 @@ void gauss() {
 		arg->norm = norm;
 		arg->row = row;
 		arg->thread = thread;
-		pthread_create(&threads[thread], NULL, elimination, (void*) arg);
+		pthread_create(&threads[thread], NULL, elimination, (struct arg_struct *) arg);
 	}
 	//joining threads
 	for(thread = 0; thread < numThreads; thread++){
