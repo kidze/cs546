@@ -187,15 +187,15 @@ int main(int argc, char **argv) {
 
  struct arg_struct{
  	int norm;
- 	int row;
  	int thread;
  };
 
- void *elimination(struct arg_struct);
- void *elimination(struct arg_struct arg) {
- 	int norm = arg.norm;
- 	int row = arg.row;
- 	int thread = arg.thread;
+ //void *elimination(void *id);
+ void *elimination(void *id){
+	struct arg_struct *arg = id;
+ 	int norm = arg->norm;
+ 	int thread = arg->thread;
+	int row;
  	int col;
  	float multiplier;
  	for(row = norm + 1 + thread; row < N; row+=numThreads){
@@ -236,9 +236,8 @@ void gauss() {
 	for(thread = 0; thread < numThreads; thread++){
 		arg = (struct arg_struct *) malloc(sizeof(struct arg_struct));
 		arg->norm = norm;
-		arg->row = row;
 		arg->thread = thread;
-		pthread_create(&threads[thread], NULL, elimination, (struct arg_struct *) arg);
+		pthread_create(&threads[thread], NULL, elimination, arg);
 	}
 	//joining threads
 	for(thread = 0; thread < numThreads; thread++){
