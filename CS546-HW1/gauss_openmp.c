@@ -53,7 +53,7 @@ void parameters(int argc, char **argv) {
 	if (argc == 4) {
 		seed = atoi(argv[2]);
 		srand(seed);
-		numThreads=atoi(argv[3]);
+		//numThreads=atoi(argv[3]);
 		printf("Random seed = %i\n", seed);
 	}
 	if (argc >= 2) {
