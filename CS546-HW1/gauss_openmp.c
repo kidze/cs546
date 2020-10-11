@@ -1,5 +1,5 @@
 /* Gaussian elimination without pivoting.
- * Compile with "gcc gauss.c" 
+ * Compile with "gcc gauss.c"
  */
 
 /* ****** ADD YOUR CODE AT THE END OF THIS FILE. ******
@@ -14,6 +14,7 @@
 #include <sys/times.h>
 #include <sys/time.h>
 #include <time.h>
+#include <omp.h>
 
 /* Program Parameters */
 #define MAXN 2000  /* Max value of N */
@@ -54,7 +55,7 @@ void parameters(int argc, char **argv) {
 		srand(seed);
 		numThreads=atoi(argv[3]);
 		printf("Random seed = %i\n", seed);
-	} 
+	}
 	if (argc >= 2) {
 		N = atoi(argv[1]);
 		if (N < 1 || N > MAXN) {
@@ -64,7 +65,7 @@ void parameters(int argc, char **argv) {
 	}
 	else {
 		printf("Usage: %s <matrix_dimension> [random seed]\n",
-				argv[0]);    
+				argv[0]);
 		exit(0);
 	}
 
@@ -170,7 +171,7 @@ int main(int argc, char **argv) {
 	 (float)CLOCKS_PER_SEC * 1000);
       /* Contrary to the man pages, this appears not to include the parent */
   printf("--------------------------------------------\n");
-  
+
   exit(0);
 }
 
@@ -185,14 +186,15 @@ void gauss() {
 			* element row and col */
   float multiplier;
 
-  printf("Computing Serially.\n");
+  printf("Computing in parallel in OpenMP.\n");
 
   /* Gaussian elimination */
   for (norm = 0; norm < N - 1; norm++) {
+	#pragma omp parallel for private(multiplier)
     for (row = norm + 1; row < N; row++) {
       multiplier = A[row][norm] / A[norm][norm];
       for (col = norm; col < N; col++) {
-	A[row][col] -= A[norm][col] * multiplier;
+		  A[row][col] -= A[norm][col] * multiplier;
       }
       B[row] -= B[norm] * multiplier;
     }
