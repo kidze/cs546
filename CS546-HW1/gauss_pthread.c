@@ -191,6 +191,23 @@ int main(int argc, char **argv) {
  	int thread;
  };
 
+ void* elimination(struct arg_struct);
+ void* elimination(struct arg_struct arg) {
+ 	int norm = arg.norm;
+ 	int row = arg.row;
+ 	int thread = arg.thread;
+ 	int col;
+ 	float multiplier;
+ 	for(row = norm + 1 + thread; row < N; row+=numThreads){
+ 		multiplier = A[row][norm] / A[norm][norm];
+ 		for(col = norm; col < N; col++){
+ 			A[row][col] -= A[norm][col] * multiplier;
+ 		}
+ 		B[row] -= B[norm] * multiplier;
+ 	}
+ 	return NULL;
+ }
+
 void gauss() {
   int norm, row, col;  /* Normalization row, and zeroing
 			* element row and col */
@@ -241,21 +258,4 @@ void gauss() {
     }
     X[row] /= A[row][row];
   }
-}
-
-void* elimination(struct arg_struct);
-void* elimination(struct arg_struct arg) {
-	int norm = arg.norm;
-	int row = arg.row;
-	int thread = arg.thread;
-	int col;
-	float multiplier;
-	for(row = norm + 1 + thread; row < N; row+=numThreads){
-		multiplier = A[row][norm] / A[norm][norm];
-		for(col = norm; col < N; col++){
-			A[row][col] -= A[norm][col] * multiplier;
-		}
-		B[row] -= B[norm] * multiplier;
-	}
-	return NULL;
 }
