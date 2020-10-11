@@ -240,7 +240,7 @@ struct arg_struct{
 	int thread;
 }
 
-void* elimination(struct arg_struct arg){
+void *elimination(struct arg_struct arg){
 	int norm = arg.norm;
 	int row = arg.row;
 	int thread = arg.thread;
