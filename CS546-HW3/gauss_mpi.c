@@ -18,7 +18,7 @@
 #include <mpi.h>
 
 /* Program Parameters */
-#define MAXN 2000  /* Max value of N */
+#define MAXN 3000  /* Max value of N */
 int N;  /* Matrix size */
 int p;	//number of processors created. Command line argument can modify it.
 int myid;
@@ -50,6 +50,7 @@ unsigned int time_seed() {
 
 /* Set the program parameters from the command-line arguments */
 void parameters(int argc, char **argv) {
+
 	int seed = 0;  /* Random seed */
 	char uid[32]; /*User name */
 
