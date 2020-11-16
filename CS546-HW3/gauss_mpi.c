@@ -20,7 +20,7 @@
 /* Program Parameters */
 #define MAXN 2000  /* Max value of N */
 int N;  /* Matrix size */
-int p = 4;	//number of processors created. Default = 4. Command line argument can modify it.
+int p;	//number of processors created. Command line argument can modify it.
 int myid;
 /* Matrices and vectors */
 //volatile float A[MAXN][MAXN], B[MAXN], X[MAXN];
@@ -59,7 +59,7 @@ void parameters(int argc, char **argv) {
 	if (argc == 3) {
 		seed = atoi(argv[2]);
 		srand(seed);
-		p=atoi(argv[3]);	//get number of processors
+		//p=atoi(argv[3]);	//get number of processors
 		printf("Random seed = %i\n", seed);
 	}
 	if (argc >= 2) {
@@ -77,7 +77,6 @@ void parameters(int argc, char **argv) {
 
 	/* Print parameters */
 	printf("\nMatrix dimension N = %i.\n", N);
-	printf("\nnumber of processors = %i.\n", p);
 }
 
 /* Initialize A and B (and X to 0.0s) */
