@@ -21,7 +21,7 @@
 #define MAXN 2000  /* Max value of N */
 int N;  /* Matrix size */
 int p = 4;	//number of processors created. Default = 4. Command line argument can modify it.
-
+int id;
 /* Matrices and vectors */
 //volatile float A[MAXN][MAXN], B[MAXN], X[MAXN];
 //MPI does not like 'volatile' matrix
@@ -126,7 +126,6 @@ void print_X() {
 int main(int argc, char **argv) {
 
 	//MPI implementation
-	int myid;
 
 	MPI_Init(&argc, &argv);
 	MPI_Comm_size(MPI_COMM_WORLD, &p);
@@ -263,31 +262,31 @@ void gauss_mpi() {
 				printf("MPI elapsed time = %f\n", endtime - starttime);
 			}
 		}
-	}
-	//other processors
-	else{
-		for(row = norm + 1 + myid; row < N; row+=p){
-			//receive A and B matrix from processor 0
-			MPI_Recv(&A[row], N, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD, &status);
-			MPI_Recv(&B[row], 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD, &status);
-			multiplier = A[row][norm] / A[norm][norm];
-			for (col = norm; col < N; col++) {
-				A[row][col] -= A[norm][col] * multiplier;
-			}
-			B[row] -= B[norm] * multiplier;
+		//other processors
+		else{
+			for(row = norm + 1 + myid; row < N; row+=p){
+				//receive A and B matrix from processor 0
+				MPI_Recv(&A[row], N, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD, &status);
+				MPI_Recv(&B[row], 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD, &status);
+				multiplier = A[row][norm] / A[norm][norm];
+				for (col = norm; col < N; col++) {
+					A[row][col] -= A[norm][col] * multiplier;
+				}
+				B[row] -= B[norm] * multiplier;
 
-			//send back values to processor 0
-			MPI_Isend(&A[row], N, MPI_DOUBLE, 0, 1, MPI_COMM_WORLD, &request);
-			MPI_Wait(&request, &status);
-			MPI_Isend(&B[row], 1, MPI_DOUBLE, 0, 1, MPI_COMM_WORLD, &request);
-			MPI_Wait(&request, &status);
+				//send back values to processor 0
+				MPI_Isend(&A[row], N, MPI_DOUBLE, 0, 1, MPI_COMM_WORLD, &request);
+				MPI_Wait(&request, &status);
+				MPI_Isend(&B[row], 1, MPI_DOUBLE, 0, 1, MPI_COMM_WORLD, &request);
+				MPI_Wait(&request, &status);
+			}
 		}
+		MPI_Barrier(MPI_COMM_WORLD);	//wait for p processors
 	}
-	MPI_Barrier(MPI_COMM_WORLD);	//wait for p processors
 }
 
 void backSubstitution(){
-
+	int row, col;
 	for (row = N - 1; row >= 0; row--) {
       X[row] = B[row];
       for (col = N-1; col > row; col--) {
