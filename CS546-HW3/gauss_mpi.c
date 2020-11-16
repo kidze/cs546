@@ -21,7 +21,7 @@
 #define MAXN 2000  /* Max value of N */
 int N;  /* Matrix size */
 int p = 4;	//number of processors created. Default = 4. Command line argument can modify it.
-int id;
+int myid;
 /* Matrices and vectors */
 //volatile float A[MAXN][MAXN], B[MAXN], X[MAXN];
 //MPI does not like 'volatile' matrix
