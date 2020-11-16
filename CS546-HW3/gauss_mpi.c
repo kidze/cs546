@@ -77,6 +77,7 @@ void parameters(int argc, char **argv) {
 
 	/* Print parameters */
 	printf("\nMatrix dimension N = %i.\n", N);
+	printf("\nnumber of processors = %i.\n", p);
 }
 
 /* Initialize A and B (and X to 0.0s) */
