@@ -251,8 +251,8 @@ void gauss_mpi() {
 			//receive values from other processors
 			for(proc = 1; proc<p ; proc++){
 				for(row = norm + 1 + proc; row < N; row+=p){
-					MPI_Recv(&A[row], N, MPI_DOUBLE, proc, 1, MPI_COMM_WORLD, &status);
-					MPI_Recv(&B[row], 1, MPI_DOUBLE, proc, 1, MPI_COMM_WORLD, &status);
+					MPI_Irecv(&A[row], N, MPI_DOUBLE, proc, 1, MPI_COMM_WORLD, &status);
+					MPI_Irecv(&B[row], 1, MPI_DOUBLE, proc, 1, MPI_COMM_WORLD, &status);
 				}
 			}
 
@@ -267,8 +267,8 @@ void gauss_mpi() {
 		else{
 			for(row = norm + 1 + myid; row < N; row+=p){
 				//receive A and B matrix from processor 0
-				MPI_Recv(&A[row], N, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD, &status);
-				MPI_Recv(&B[row], 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD, &status);
+				MPI_Irecv(&A[row], N, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD, &status);
+				MPI_Irecv(&B[row], 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD, &status);
 				multiplier = A[row][norm] / A[norm][norm];
 				for (col = norm; col < N; col++) {
 					A[row][col] -= A[norm][col] * multiplier;
