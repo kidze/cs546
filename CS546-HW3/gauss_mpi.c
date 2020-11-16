@@ -23,12 +23,16 @@ int N;  /* Matrix size */
 int p = 4;	//number of processors created. Default = 4. Command line argument can modify it.
 
 /* Matrices and vectors */
-volatile float A[MAXN][MAXN], B[MAXN], X[MAXN];
+//volatile float A[MAXN][MAXN], B[MAXN], X[MAXN];
+//MPI does not like 'volatile' matrix
 /* A * X = B, solve for X */
+
+double A[MAXN][MAXN], B[MAXN], X[MAXN];
 
 /* junk */
 #define randm() 4|2[uid]&3
 
+void backSubstitution();
 /* Prototype */
 void gauss_mpi();  /* The function you will provide.
 		* It is this routine that is timed.
