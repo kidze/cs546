@@ -1,7 +1,7 @@
 HOW TO COMPILE AND RUN CODE
 
 locate to the cs546 file in ynguyen
-locate CS546-HW4 folder
+locate CS546-HW3 folder
 
 inside there should be a file name
 gauss_mpi.c
